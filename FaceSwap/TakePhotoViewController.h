@@ -11,6 +11,7 @@
 @interface TakePhotoViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     UIImagePickerController     *_captureVC;
+    BOOL                        _hasFirstRun;
 }
 @property(nonatomic, retain)UIImagePickerController     *captureVC;
 @end

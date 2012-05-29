@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
+    UIImagePickerController     *_captureVC;
+}
 
-
+@property (nonatomic, retain) IBOutlet UIButton *btnGetPro;
+@property (nonatomic, retain) IBOutlet UIButton *btnMore;
 - (IBAction)btnTakePhotoPressed:(id)sender;
 - (IBAction)btnPhotosPressed:(id)sender;
 - (void)btnHowToPressed;
