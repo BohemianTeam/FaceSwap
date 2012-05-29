@@ -11,6 +11,6 @@
 
 #define kFaceSwapFreeVersion    @"Free Version"
 #define kFaceSwapProVersion     @"Pro Version"
-#define kFaceSwapVersion        kFaceSwapFreeVersion
+#define kFaceSwapVersion        kFaceSwapProVersion
 
 #endif

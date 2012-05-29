@@ -48,7 +48,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">bg_main2.png</string>
+							<string key="NSResourceName">bg_main_pro1.png</string>
 						</object>
 					</object>
 					<object class="IBUIButton" id="743543676">
@@ -351,7 +351,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="bg_main2.png">{320, 436}</string>
+			<string key="bg_main_pro1.png">{320, 436}</string>
 			<string key="btn_get_pro.png">{203, 46}</string>
 			<string key="btn_more.png">{110, 46}</string>
 			<string key="btn_photos.png">{203, 46}</string>
