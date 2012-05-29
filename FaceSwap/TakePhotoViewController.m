@@ -8,6 +8,7 @@
 
 #import "TakePhotoViewController.h"
 #import <MobileCoreServices/UTCoreTypes.h>
+#import "FaceSwappingViewController.h"
 @interface TakePhotoViewController ()
 
 @end
@@ -24,6 +25,10 @@
             NSArray *mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
             if ([mediaTypes containsObject:(NSString *)kUTTypeImage]) {
                 // create our image picker
+                if (_captureVC) {
+                    [_captureVC release];
+                    _captureVC = nil;
+                }
                 _captureVC = [[UIImagePickerController alloc] init];
                 _captureVC.delegate = self;
                 _captureVC.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -44,6 +49,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.view setBackgroundColor:[UIColor clearColor]];
+     
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -54,7 +60,10 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self presentModalViewController:_captureVC animated:YES];
+    if (!_hasFirstRun) {
+        [self presentModalViewController:_captureVC animated:YES];
+        _hasFirstRun = !_hasFirstRun;
+    }
 }
 
 - (void)viewDidUnload
@@ -74,8 +83,36 @@
 {
     
 }
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self dismissModalViewControllerAnimated:YES];
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    [_captureVC dismissModalViewControllerAnimated:YES];
+    if (_captureVC) {
+        [_captureVC release];
+        _captureVC = nil;
+    }
+    
+    UIImage *image;
+    image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary) {
+    } else {
+        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    }
+    
+    
+    
+    FaceSwappingViewController * FSVC = [[FaceSwappingViewController alloc] initWithNibName:@"FaceSwappingViewController" bundle:nil];
+    [FSVC.img setImage:[image retain]];
+    [self.navigationController pushViewController:FSVC animated:YES];
+    [FSVC release];
 }
+
+- (void)image:(UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo {
+    NSLog(@"SAVE IMAGE COMPLETE");
+    if(error != nil) {
+        NSLog(@"ERROR SAVING:%@",[error localizedDescription]);
+    }
+}
+
+
 @end
