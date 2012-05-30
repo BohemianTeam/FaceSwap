@@ -16,6 +16,8 @@
 
 @implementation ViewController
 @synthesize btnGetPro, btnMore;
+@synthesize backgroundImage;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -31,6 +33,7 @@
     if (kFaceSwapVersion == kFaceSwapProVersion) {
         self.btnGetPro.hidden = YES;
         self.btnMore.frame = CGRectMake(105, 302, 110, 45);
+        self.backgroundImage.image = [UIImage imageNamed:@"bg_main_pro1"];
     }
 }
 
@@ -38,8 +41,16 @@
 {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    [backgroundImage release];
+    [btnMore release];
+    [btnGetPro release];
 }
 
+- (void)dealloc
+{
+    [_captureVC release];
+    [super dealloc];
+}
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[self navigationController] setNavigationBarHidden:NO animated:YES];

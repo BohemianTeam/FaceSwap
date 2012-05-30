@@ -43,6 +43,7 @@
     // Do any additional setup after loading the view from its nib.
     if (kFaceSwapVersion == kFaceSwapProVersion) {
         self.icon.hidden = YES;
+        self.bannerView.hidden = YES;
     }
     [self.img setImage:self.pickedImg];
 }

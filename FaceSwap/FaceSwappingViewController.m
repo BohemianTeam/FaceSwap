@@ -8,7 +8,7 @@
 
 #import "FaceSwappingViewController.h"
 #import "FaceSwappedViewController.h"
-
+#import "Config.h"
 @interface FaceSwappingViewController ()
 
 @end
@@ -45,6 +45,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [self.img setImage:self.pickedImg];
+    
+    if(kFaceSwapVersion == kFaceSwapProVersion)
+        self.bannerView.hidden = YES;
 }
 
 - (void)viewDidUnload
