@@ -80,16 +80,16 @@
 - (void)actionSheet:(UIActionSheet *)sender clickedButtonAtIndex:(int)index
 {
     switch (index) {
-        case 0:
+        case 0://email
+            [self mailShareOpenMail];
+            break;
+        case 1://facebook
             
             break;
-        case 1:
+        case 2://twitter
             
             break;
-        case 2:
-            
-            break;
-        case 3:
+        case 3://remove watermark
             
             break;
         case 4:
@@ -98,6 +98,143 @@
         default:
             break;
     }
+}
+
+#pragma mark -
+#pragma mark Twitter sharing
+
+
+#pragma mark -
+#pragma mark Mail Share
+
+- (void) sendMailByDefaultApp {
+    NSLog(@"send mail");
+    NSString *mailTo = @"trinhduchung266@gmail.com";
+    NSString *cc = @"";
+    NSString *subject = @"I want to request new city";
+    NSString *body = @"";
+    NSString *email = [NSString stringWithFormat:@"mailto:%@?cc=%@&subject=%@&body=%@",
+					   mailTo,cc,subject,body];
+    email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+}
+
+- (void) sendMailByMFMailComposer {
+    NSLog(@"send mail");
+    NSString *mailTo = @"trinhduchung266@gmail.com";
+    NSString *cc = @"";
+    NSString *subject = @"Share Image";
+    NSString *body = @"";
+    
+    MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
+    picker.mailComposeDelegate = self;
+    
+    [picker setSubject:subject];
+    
+    // Set up recipients
+    NSArray *toRecipients = [[NSArray alloc] initWithObjects:mailTo, nil];
+    [picker setToRecipients:toRecipients];
+    [toRecipients release];
+    if ([cc isEqualToString:@""] == NO) {
+		NSArray *ccRecipients = [NSArray arrayWithObject:cc];
+		[picker setCcRecipients:ccRecipients];
+    }
+    
+    [picker setMessageBody:body isHTML:NO];
+    CGRect fram = CGRectMake(0, -20, 320, 480);
+    [picker.view setFrame:fram];
+    
+    [self presentModalViewController:picker animated:YES];
+    
+    [picker release];
+    
+}
+
+//MFMailComposeDelegate
+// Dismisses the email composition interface when users tap Cancel or Send. Proceeds to update the message field with the result of the operation.
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error{
+    NSLog(@"===didFinishWithResult=");
+    NSString *_msg;
+    switch (result) {
+		case MFMailComposeResultCancelled:
+			//_msg = @"MailShareCanceled";
+			break;
+		case MFMailComposeResultSaved:
+		{
+			_msg = @"MailShareSaved";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@"AlertTitleMailShare"
+								  message:_msg
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+		}
+			break;
+		case MFMailComposeResultSent:
+		{
+			_msg = @"MailShareSent";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@"AlertTitleMailShare"
+								  message:_msg
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+		}
+			break;
+		case MFMailComposeResultFailed:
+		{
+			_msg = @"Failed";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@"AlertTitleMailShare"
+								  message:_msg
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+			[alert show];
+			[alert release];
+		}
+			break;
+		default:
+		{
+			_msg = @"MailShareFailed";
+			UIAlertView *alert = [[UIAlertView alloc]
+								  initWithTitle:@"AlertTitleMailShare"
+								  message:_msg
+								  delegate:self
+								  cancelButtonTitle:@"OK"
+								  otherButtonTitles:nil];
+            [alert show];
+            [alert release];
+		}
+			break;
+    }
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+-(void) mailShareOpenMail {
+    Class mailClass = (NSClassFromString(@"MFMailComposeViewController"));
+    if (mailClass != nil) {
+		// We must always check whether the current device is configured for sending emails
+		if ([mailClass canSendMail]) {
+			NSLog(@"===1=");
+			//_body = @"I love this song";
+			[self sendMailByMFMailComposer];
+		}
+		else {
+			NSLog(@"===2=");
+			[self sendMailByDefaultApp];
+		}
+    }
+    else {
+		NSLog(@"===3=");
+		[self sendMailByDefaultApp];
+    }
+    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

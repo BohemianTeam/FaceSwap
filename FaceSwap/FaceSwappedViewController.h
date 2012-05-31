@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate>{
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>{
     
 }
 
