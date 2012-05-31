@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0001A30E157758A10056A5E4 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0001A30D157758A10056A5E4 /* MessageUI.framework */; };
 		0001A312157759870056A5E4 /* FBConnect.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0001A311157759870056A5E4 /* FBConnect.bundle */; };
+		0001A333157762050056A5E4 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0001A332157762050056A5E4 /* Twitter.framework */; };
+		0001A339157768020056A5E4 /* FacebookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001A338157768020056A5E4 /* FacebookViewController.m */; };
+		0001A34215776AB60056A5E4 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001A33F15776AB60056A5E4 /* MBProgressHUD.m */; };
+		0001A34315776AB60056A5E4 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 0001A34115776AB60056A5E4 /* Util.m */; };
 		00B77F0315748433007C5122 /* FaceSwappingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B77F0115748433007C5122 /* FaceSwappingViewController.m */; };
 		00B77F0415748433007C5122 /* FaceSwappingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B77F0215748433007C5122 /* FaceSwappingViewController.xib */; };
 		00B77F1415748D3F007C5122 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B77F1315748D3F007C5122 /* iAd.framework */; };
@@ -76,6 +80,13 @@
 		0001A32B157759B70056A5E4 /* SBJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		0001A32C157759B70056A5E4 /* SBJsonWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		0001A32D157759B70056A5E4 /* SBJsonWriter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		0001A332157762050056A5E4 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		0001A337157768020056A5E4 /* FacebookViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookViewController.h; sourceTree = "<group>"; };
+		0001A338157768020056A5E4 /* FacebookViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookViewController.m; sourceTree = "<group>"; };
+		0001A33E15776AB60056A5E4 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		0001A33F15776AB60056A5E4 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		0001A34015776AB60056A5E4 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		0001A34115776AB60056A5E4 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		00B77F0015748433007C5122 /* FaceSwappingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceSwappingViewController.h; sourceTree = "<group>"; };
 		00B77F0115748433007C5122 /* FaceSwappingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceSwappingViewController.m; sourceTree = "<group>"; };
 		00B77F0215748433007C5122 /* FaceSwappingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FaceSwappingViewController.xib; sourceTree = "<group>"; };
@@ -129,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0001A333157762050056A5E4 /* Twitter.framework in Frameworks */,
 				0001A30E157758A10056A5E4 /* MessageUI.framework in Frameworks */,
 				00B77F1415748D3F007C5122 /* iAd.framework in Frameworks */,
 				181BB17015714F5500FB354F /* MobileCoreServices.framework in Frameworks */,
@@ -215,6 +227,7 @@
 		181BB13415713A9E00FB354F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0001A332157762050056A5E4 /* Twitter.framework */,
 				0001A30D157758A10056A5E4 /* MessageUI.framework */,
 				00B77F1315748D3F007C5122 /* iAd.framework */,
 				181BB13515713A9E00FB354F /* UIKit.framework */,
@@ -294,6 +307,8 @@
 		183195F715734D4C00094476 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				0001A337157768020056A5E4 /* FacebookViewController.h */,
+				0001A338157768020056A5E4 /* FacebookViewController.m */,
 				181BB14715713A9E00FB354F /* ViewController.h */,
 				181BB14815713A9E00FB354F /* ViewController.m */,
 				181BB16215714CB700FB354F /* TakePhotoViewController.h */,
@@ -311,6 +326,10 @@
 		183195FC15734E4800094476 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0001A33E15776AB60056A5E4 /* MBProgressHUD.h */,
+				0001A33F15776AB60056A5E4 /* MBProgressHUD.m */,
+				0001A34015776AB60056A5E4 /* Util.h */,
+				0001A34115776AB60056A5E4 /* Util.m */,
 				183195FD15734E8900094476 /* Config.h */,
 			);
 			name = Utils;
@@ -385,9 +404,7 @@
 				00B77F2F1574B2B4007C5122 /* faceSwap.png in Resources */,
 				00B77F461574BC3E007C5122 /* bg_main_pro1.png in Resources */,
 				00B77F471574BC3E007C5122 /* bg_main_pro2.png in Resources */,
-
 				0001A312157759870056A5E4 /* FBConnect.bundle in Resources */,
-
 				18359B2A15762697009E4644 /* icon_pro.png in Resources */,
 				18359B2B15762697009E4644 /* icon_pro@2x.png in Resources */,
 				18359B2E157626C4009E4644 /* icon_free.png in Resources */,
@@ -396,7 +413,6 @@
 				18359B351576270E009E4644 /* icon_free@2x.png in Resources */,
 				18359B37157628B0009E4644 /* icon_pro.png in Resources */,
 				18359B39157628B5009E4644 /* icon_pro@2x.png in Resources */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +429,9 @@
 				181BB16515714CB700FB354F /* TakePhotoViewController.m in Sources */,
 				00B77F0315748433007C5122 /* FaceSwappingViewController.m in Sources */,
 				00B77F1C1574A81B007C5122 /* FaceSwappedViewController.m in Sources */,
+				0001A339157768020056A5E4 /* FacebookViewController.m in Sources */,
+				0001A34215776AB60056A5E4 /* MBProgressHUD.m in Sources */,
+				0001A34315776AB60056A5E4 /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

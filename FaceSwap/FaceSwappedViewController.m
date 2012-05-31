@@ -7,6 +7,8 @@
 //
 
 #import "FaceSwappedViewController.h"
+#import <Twitter/Twitter.h>
+
 
 @interface FaceSwappedViewController ()
 
@@ -88,13 +90,18 @@
             [self mailShareOpenMail];
             break;
         case 1://facebook
-            
+        {
+            FacebookViewController * fbViewController = [[FacebookViewController alloc] init];
+            [fbViewController setImage:self.img.image withMessage:@"msg"];
+            [self.navigationController pushViewController:fbViewController animated:YES];
+            [fbViewController release];
             break;
+        }
         case 2://twitter
-            
+            [self tweet];
             break;
         case 3://remove watermark
-            
+            NSLog(@"link to faceswap pro");
             break;
         case 4:
             
@@ -105,8 +112,33 @@
 }
 
 #pragma mark -
-#pragma mark Twitter sharing
+#pragma mark Facebook sharing -- FacebookViewcontroller delegate
+- (void) didUploadToFacebookSuccess {
+    NSLog(@"upload image to facebook success");
+}
 
+#pragma mark -
+#pragma mark Twitter sharing
+- (void) tweet {
+    if ([TWTweetComposeViewController canSendTweet])
+    {
+        TWTweetComposeViewController *tweetSheet = [[TWTweetComposeViewController alloc] init];
+        [tweetSheet setInitialText:@"Tweeting image"];
+        [tweetSheet addImage:self.img.image];
+        
+	    [self presentModalViewController:tweetSheet animated:YES];
+    }
+    else
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] 
+                                  initWithTitle:@"Sorry"                                                             
+                                  message:@"You can't send a tweet right now, make sure your device has an internet connection and you have at least one Twitter account setup"                                                          
+                                  delegate:nil                                              
+                                  cancelButtonTitle:@"OK"                                                   
+                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+}
 
 #pragma mark -
 #pragma mark Mail Share

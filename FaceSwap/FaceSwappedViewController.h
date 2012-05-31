@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>{
+#import "FacebookViewController.h"
+
+@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, FacebookViewControllerDelegate>{
     
 }
 

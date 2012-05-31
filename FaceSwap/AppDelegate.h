@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FBConnect.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@class FacebookViewController;
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
+    Facebook                *facebook;
+    NSMutableDictionary     *userPermissions;
+    FacebookViewController  *facebookViewController;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) UINavigationController *navigationController;
+
+@property (nonatomic, retain) Facebook *facebook;
+@property (nonatomic, retain) NSMutableDictionary *userPermissions;
+@property (nonatomic, retain) FacebookViewController *facebookViewController;
 @end
