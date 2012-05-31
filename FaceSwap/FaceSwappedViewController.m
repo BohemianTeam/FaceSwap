@@ -70,7 +70,11 @@
 }
 
 - (void)didShareClicked:(id)sender {
-    UIActionSheet * shareAction = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook", @"Twitter", @"Remove Watermark", nil];
+    UIActionSheet * shareAction = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook", @"Twitter", nil];
+    if(kFaceSwapVersion == kFaceSwapFreeVersion){
+        [shareAction addButtonWithTitle:@"Remove Watermark"];
+    }
+
     [shareAction showInView:self.view];
     [shareAction release];
 }
