@@ -21,10 +21,9 @@ static NSString* kAppId = @"166549606700386";
 
 @synthesize window = _window;
 @synthesize navigationController = _navigationController;
-@synthesize facebook, facebookViewController, userPermissions;
+@synthesize facebook, userPermissions;
 - (void)dealloc
 {
-    [facebookViewController release];
     [facebook release];
     [userPermissions release];
     [_window release];
@@ -47,8 +46,15 @@ static NSString* kAppId = @"166549606700386";
     //check show alert buy pro version
     [self showAlertBuyProVersion];
     
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"bg_navi"] forBarMetrics:UIBarMetricsDefault];
+    
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    // Override point for customization after application launch.
+
+    ViewController *faceSwapVC = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
+    self.navigationController = [[[UINavigationController alloc] initWithRootViewController:faceSwapVC]autorelease];
+    
     // Initialize Facebook
-    facebookViewController = [[FacebookViewController alloc] init];
     
     facebook = [[Facebook alloc] initWithAppId:kAppId andDelegate:nil];
     
@@ -63,6 +69,8 @@ static NSString* kAppId = @"166549606700386";
     
     // Override point for customization after application launch.
     // Add the navigation controller's view to the window and display.
+    self.window.rootViewController = self.navigationController;
+    [self.window makeKeyAndVisible];
     
     // Check App ID:
     // This is really a warning for the developer, this should not
@@ -113,16 +121,6 @@ static NSString* kAppId = @"166549606700386";
         }
     }
 
-    
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"bg_navi"] forBarMetrics:UIBarMetricsDefault];
-    
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
-
-    ViewController *faceSwapVC = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
-    self.navigationController = [[[UINavigationController alloc] initWithRootViewController:faceSwapVC]autorelease];
-    self.window.rootViewController = self.navigationController;
-    [self.window makeKeyAndVisible];
     return YES;
 }
 

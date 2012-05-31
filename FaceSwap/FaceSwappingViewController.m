@@ -9,12 +9,14 @@
 #import "FaceSwappingViewController.h"
 #import "FaceSwappedViewController.h"
 #import "Config.h"
+#import <iAd/iAd.h>
+
 @interface FaceSwappingViewController ()
 
 @end
 
 @implementation FaceSwappingViewController
-@synthesize btnBack,btnFlip,btnSwap,bannerView,img, pickedImg;
+@synthesize btnBack,btnFlip,btnSwap,bannerView,img, pickedImg, bannerIsVisible;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,6 +50,11 @@
     
     if(kFaceSwapVersion == kFaceSwapProVersion)
         self.bannerView.hidden = YES;
+    
+    self.bannerView.delegate = self;
+    self.bannerIsVisible = NO;
+    self.bannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+    self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
 }
 
 - (void)viewDidUnload
@@ -56,6 +63,50 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
+#pragma mark -
+#pragma mark iAd delegate
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!self.bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        // banner is invisible now and moved out of the screen on 50 px
+        banner.frame = CGRectOffset(banner.frame, 0, 50);
+        [UIView commitAnimations];
+        self.bannerIsVisible = YES;
+    }
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (self.bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        // banner is visible and we move it out of the screen, due to connection issue
+        banner.frame = CGRectOffset(banner.frame, 0, -50);
+        [UIView commitAnimations];
+        self.bannerIsVisible = NO;
+    }
+}
+
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
+{
+    NSLog(@"Banner view is beginning an ad action");
+    BOOL shouldExecuteAction = YES;
+    if (!willLeave && shouldExecuteAction)
+    {
+        // stop all interactive processes in the app
+        
+    }
+    return shouldExecuteAction;
+}
+
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner
+{
+    // resume everything you've stopped
+    
+}
+
 
 #pragma mark -
 #pragma mark Button Actions
@@ -77,9 +128,17 @@
     [vc release];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait||UIInterfaceOrientationPortrait);
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
+    else
+        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
 }
 
 @end

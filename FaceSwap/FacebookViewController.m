@@ -18,8 +18,10 @@
 @implementation FacebookViewController
 @synthesize permissions = _permissions;
 @synthesize delegate = _delegate;
+@synthesize facebook = _facebook;
 
 - (void) dealloc {
+    [_facebook release];
     [_permissions release];
     
     [_photoTag release];
@@ -37,8 +39,9 @@
         // Custom initialization
          _permissions = [[NSArray alloc] initWithObjects:@"offline_access", nil];
         AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        _facebook = [delegate facebook];
+        _facebook = [[delegate facebook] retain];
         _facebook.sessionDelegate = self;
+
     }
     return self;
 }
@@ -314,7 +317,6 @@
 
 #pragma mark - Public Methods
 - (void) setImage:(UIImage *)img withMessage:(NSString *)msg {
-    _msg = msg;
     _currentImage = [img retain];
 }
 
@@ -502,19 +504,7 @@
     NSLog(@"Err code: %d", [error code]);
     [Util hideLoading];
 }
-/*
-#pragma mark FBDialogDelegate delegate
 
-- (BOOL)dialog:(FBDialog*)dialog shouldOpenURLInExternalBrowser:(NSURL *)url {
-    _urlOpenInExternalBrowser = [url retain];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"FBConfirmOpenExternalURL"
-                                                   delegate:self cancelButtonTitle:@"Cancel"otherButtonTitles:@"Continue", nil];
-    alert.tag = Alert_Open_Url_Tag;
-    [alert show];
-    [alert release];
-    return FALSE;
-}
-*/
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);

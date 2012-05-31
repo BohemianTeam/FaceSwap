@@ -11,11 +11,13 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "FacebookViewController.h"
 
-@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, FacebookViewControllerDelegate>{
+@interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, FacebookViewControllerDelegate, ADBannerViewDelegate>{
     
 }
 
 @property (nonatomic, retain) IBOutlet ADBannerView *bannerView;
+@property (nonatomic, assign) BOOL                  bannerIsVisible;
+
 @property (nonatomic, retain) IBOutlet UIImageView  *img;
 @property (nonatomic, retain) UIImage               *pickedImg;
 @property (nonatomic, retain) IBOutlet UIButton     *btnSave;

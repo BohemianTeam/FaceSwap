@@ -8,14 +8,14 @@
 
 #import "FaceSwappedViewController.h"
 #import <Twitter/Twitter.h>
-
+#import <iAd/iAd.h>
 
 @interface FaceSwappedViewController ()
 
 @end
 
 @implementation FaceSwappedViewController
-@synthesize btnShare,btnFlip,btnSwap,bannerView,img, pickedImg,icon,btnSave;
+@synthesize btnShare,btnFlip,btnSwap,bannerView,img, pickedImg,icon,btnSave,bannerIsVisible;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,11 +43,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
     if (kFaceSwapVersion == kFaceSwapProVersion) {
         self.icon.hidden = YES;
         self.bannerView.hidden = YES;
     }
     [self.img setImage:self.pickedImg];
+    
+    self.bannerView.delegate = self;
+    self.bannerIsVisible = NO;
+    self.bannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+    self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
 }
 
 - (void)viewDidUnload
@@ -55,6 +61,50 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+#pragma mark -
+#pragma mark iAd delegate
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!self.bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        // banner is invisible now and moved out of the screen on 50 px
+        banner.frame = CGRectOffset(banner.frame, 0, 50);
+        [UIView commitAnimations];
+        self.bannerIsVisible = YES;
+    }
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (self.bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+        // banner is visible and we move it out of the screen, due to connection issue
+        banner.frame = CGRectOffset(banner.frame, 0, -50);
+        [UIView commitAnimations];
+        self.bannerIsVisible = NO;
+    }
+}
+
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
+{
+    NSLog(@"Banner view is beginning an ad action");
+    BOOL shouldExecuteAction = YES;
+    if (!willLeave && shouldExecuteAction)
+    {
+        // stop all interactive processes in the app
+
+    }
+    return shouldExecuteAction;
+}
+
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner
+{
+    // resume everything you've stopped
+
 }
 
 #pragma mark -
@@ -91,10 +141,9 @@
             break;
         case 1://facebook
         {
-            FacebookViewController * fbViewController = [[FacebookViewController alloc] init];
+            FacebookViewController * fbViewController = [[[FacebookViewController alloc] init] autorelease];
             [fbViewController setImage:self.img.image withMessage:@"msg"];
             [self.navigationController pushViewController:fbViewController animated:YES];
-            [fbViewController release];
             break;
         }
         case 2://twitter
@@ -123,7 +172,7 @@
     if ([TWTweetComposeViewController canSendTweet])
     {
         TWTweetComposeViewController *tweetSheet = [[TWTweetComposeViewController alloc] init];
-        [tweetSheet setInitialText:@"Tweeting image"];
+        [tweetSheet setInitialText:@"Tweeting image shared from Faceswap"];
         [tweetSheet addImage:self.img.image];
         
 	    [self presentModalViewController:tweetSheet animated:YES];
@@ -166,7 +215,12 @@
     picker.mailComposeDelegate = self;
     
     [picker setSubject:subject];
+    // Create NSData object as PNG image data from camera image
+    NSData *data = UIImagePNGRepresentation(self.img.image);
     
+    // Attach image data to the email
+    // 'CameraImage.png' is the file name that will be attached to the email
+    [picker addAttachmentData:data mimeType:@"image/png" fileName:@"Face Swap Image"];
     // Set up recipients
     NSArray *toRecipients = [[NSArray alloc] initWithObjects:mailTo, nil];
     [picker setToRecipients:toRecipients];
@@ -273,9 +327,17 @@
     
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait||UIInterfaceOrientationPortrait);
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
+    else
+        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
 }
 
 @end

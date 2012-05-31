@@ -42,11 +42,11 @@ typedef enum FacebookRequest {
     FacebookRequest         _fbRequest;
     
     id                      _delegate;
-    
-    NSString                *_msg;
+
 }
 @property (nonatomic, retain) NSArray *permissions;
-@property (nonatomic, retain) id delegate;
+@property (nonatomic, assign) id delegate;
+@property (nonatomic, retain) Facebook * facebook;
 
 - (void) setImage:(UIImage *) img withMessage:(NSString *) msg;
 @end
