@@ -13,6 +13,7 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
     Facebook                *facebook;
     NSMutableDictionary     *userPermissions;
+    UIAlertView *buyAlert;
 }
 
 @property (strong, nonatomic) UIWindow *window;

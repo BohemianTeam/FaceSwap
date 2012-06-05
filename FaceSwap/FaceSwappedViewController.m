@@ -16,6 +16,8 @@
 
 @implementation FaceSwappedViewController
 @synthesize btnShare,btnFlip,btnSwap,bannerView,img, pickedImg,icon,btnSave,bannerIsVisible;
+@synthesize mergedImg;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -49,11 +51,14 @@
         self.bannerView.hidden = YES;
     }
     [self.img setImage:self.pickedImg];
+    [self createMergedImage];
     
     self.bannerView.delegate = self;
     self.bannerIsVisible = NO;
     self.bannerView.requiredContentSizeIdentifiers = [NSSet setWithObjects:ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
     self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+    
+    
 }
 
 - (void)viewDidUnload
@@ -64,6 +69,23 @@
 }
 
 #pragma mark -
+#pragma mark Private Methods
+- (void) createMergedImage {
+    UIGraphicsBeginImageContext(self.pickedImg.size);
+    
+    [self.pickedImg drawInRect:CGRectMake(0, 0, self.pickedImg.size.width, self.pickedImg.size.height)];
+    
+    [self.icon.image drawInRect:CGRectMake(216, 328, self.icon.image.size.width, self.icon.image.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
+    
+    self.mergedImg = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    self.icon.hidden = YES;
+    [self.img setImage:self.mergedImg];
+}
+
+#pragma mark -
 #pragma mark iAd delegate
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
@@ -71,7 +93,7 @@
     {
         [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
         // banner is invisible now and moved out of the screen on 50 px
-        banner.frame = CGRectOffset(banner.frame, 0, 50);
+        banner.frame = CGRectOffset(banner.frame, 0, 0);
         [UIView commitAnimations];
         self.bannerIsVisible = YES;
     }
@@ -122,19 +144,23 @@
 }
 
 - (void)didShareClicked:(id)sender {
-    UIActionSheet * shareAction = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook", @"Twitter", nil];
+    
     if(kFaceSwapVersion == kFaceSwapFreeVersion){
-        [shareAction addButtonWithTitle:@"Remove Watermark"];
+        UIActionSheet * shareAction = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook", @"Twitter", @"Remove Watermark", nil];
+        [shareAction showInView:self.view];
+        [shareAction release];
+    } else {
+        UIActionSheet * shareAction = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email",@"Facebook", @"Twitter", nil];
+        [shareAction showInView:self.view];
+        [shareAction release];
     }
-
-    [shareAction showInView:self.view];
-    [shareAction release];
 }
 
 #pragma mark -
 #pragma mark UIActionSheet Delegate
 - (void)actionSheet:(UIActionSheet *)sender clickedButtonAtIndex:(int)index
 {
+
     switch (index) {
         case 0://email
             [self mailShareOpenMail];
@@ -142,7 +168,11 @@
         case 1://facebook
         {
             FacebookViewController * fbViewController = [[[FacebookViewController alloc] init] autorelease];
-            [fbViewController setImage:self.img.image withMessage:@"msg"];
+            if (kFaceSwapVersion == kFaceSwapProVersion) {
+                [fbViewController setImage:self.pickedImg withMessage:@"msg"];
+            } else {
+                [fbViewController setImage:self.mergedImg withMessage:@"msg"];
+            }
             [self.navigationController pushViewController:fbViewController animated:YES];
             break;
         }
@@ -150,7 +180,7 @@
             [self tweet];
             break;
         case 3://remove watermark
-            NSLog(@"link to faceswap pro");
+            self.icon.hidden = YES;
             break;
         case 4:
             
@@ -173,7 +203,11 @@
     {
         TWTweetComposeViewController *tweetSheet = [[TWTweetComposeViewController alloc] init];
         [tweetSheet setInitialText:@"Tweeting image shared from Faceswap"];
-        [tweetSheet addImage:self.img.image];
+        if (kFaceSwapVersion == kFaceSwapProVersion) {
+            [tweetSheet addImage:self.pickedImg];
+        } else {
+            [tweetSheet addImage:self.mergedImg];
+        }
         
 	    [self presentModalViewController:tweetSheet animated:YES];
     }
@@ -216,8 +250,10 @@
     
     [picker setSubject:subject];
     // Create NSData object as PNG image data from camera image
-    NSData *data = UIImagePNGRepresentation(self.img.image);
-    
+    NSData *data = UIImagePNGRepresentation(self.pickedImg);
+    if (kFaceSwapVersion == kFaceSwapFreeVersion) {
+        data = UIImagePNGRepresentation(self.mergedImg);
+    }
     // Attach image data to the email
     // 'CameraImage.png' is the file name that will be attached to the email
     [picker addAttachmentData:data mimeType:@"image/png" fileName:@"Face Swap Image"];

@@ -35,7 +35,7 @@ static NSString* kAppId = @"166549606700386";
 {
     if(kFaceSwapVersion == kFaceSwapFreeVersion)
     {
-        UIAlertView *buyAlert = [[UIAlertView alloc] initWithTitle:@"Get Face Swap Pro" message:@"Face Swap Pro is a premium ad free version that alows you to save your Face Swap images with no watermark" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Get it Now!", nil];
+        buyAlert = [[UIAlertView alloc] initWithTitle:@"Get Face Swap Pro" message:@"Face Swap Pro is a premium ad free version that alows you to save your Face Swap images with no watermark" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Get it Now!", nil];
         [buyAlert show];
         [buyAlert release];
     }
@@ -176,8 +176,12 @@ static NSString* kAppId = @"166549606700386";
 }
 #pragma mark - UIAlertViewDelegate methods
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    // Quit the app
-    exit(1);
+    if (alertView == buyAlert) {
+        
+    } else {
+        // Quit the app
+        exit(1);
+    }
 }
 
 @end

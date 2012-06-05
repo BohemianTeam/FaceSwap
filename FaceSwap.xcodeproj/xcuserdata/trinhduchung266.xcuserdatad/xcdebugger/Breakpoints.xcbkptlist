@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "FaceSwap/FacebookViewController.m"
-         timestampString = "360177835.78085"
+         timestampString = "360179437.7461"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "438"
-         endingLineNumber = "438"
+         startingLineNumber = "445"
+         endingLineNumber = "445"
          landmarkName = "-request:didLoad:"
          landmarkType = "5">
       </FileBreakpoint>

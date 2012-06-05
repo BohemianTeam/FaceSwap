@@ -20,6 +20,8 @@
 
 @property (nonatomic, retain) IBOutlet UIImageView  *img;
 @property (nonatomic, retain) UIImage               *pickedImg;
+@property (nonatomic, retain) UIImage               *mergedImg;
+
 @property (nonatomic, retain) IBOutlet UIButton     *btnSave;
 @property (nonatomic, retain) IBOutlet UIButton     *btnSwap;
 @property (nonatomic, retain) IBOutlet UIButton     *btnFlip;

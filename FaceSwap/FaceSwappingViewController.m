@@ -71,7 +71,7 @@
     {
         [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
         // banner is invisible now and moved out of the screen on 50 px
-        banner.frame = CGRectOffset(banner.frame, 0, 50);
+        banner.frame = CGRectOffset(banner.frame, 0, 0);
         [UIView commitAnimations];
         self.bannerIsVisible = YES;
     }
