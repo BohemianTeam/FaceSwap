@@ -22,9 +22,9 @@ static NSString* kAppId = @"166549606700386";
 @synthesize window = _window;
 @synthesize navigationController = _navigationController;
 @synthesize facebook, userPermissions;
+@synthesize facebookViewController;
 - (void)dealloc
 {
-    [facebook release];
     [userPermissions release];
     [_window release];
     [_navigationController release];
@@ -55,14 +55,16 @@ static NSString* kAppId = @"166549606700386";
     self.navigationController = [[[UINavigationController alloc] initWithRootViewController:faceSwapVC]autorelease];
     
     // Initialize Facebook
+    // Initialize Facebook
+    facebookViewController = [[FacebookViewController alloc] init];
     
-    facebook = [[Facebook alloc] initWithAppId:kAppId andDelegate:nil];
+    self.facebook = [[Facebook alloc] initWithAppId:kAppId andDelegate:nil];
     
     // Check and retrieve authorization information
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]) {
-        facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+        self.facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+        self.facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
     }
     // Initialize user permissions
     userPermissions = [[NSMutableDictionary alloc] initWithCapacity:1];

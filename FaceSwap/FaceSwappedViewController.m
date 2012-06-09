@@ -9,6 +9,7 @@
 #import "FaceSwappedViewController.h"
 #import <Twitter/Twitter.h>
 #import <iAd/iAd.h>
+#import "AppDelegate.h"
 
 @interface FaceSwappedViewController ()
 
@@ -49,6 +50,10 @@
     if (kFaceSwapVersion == kFaceSwapProVersion) {
         self.icon.hidden = YES;
         self.bannerView.hidden = YES;
+        CGRect newFrame = self.img.frame;
+        newFrame.origin.y = 0;
+        newFrame.size.height = self.img.frame.size.height + 50;
+        self.img.frame = newFrame;
     }
     [self.img setImage:self.pickedImg];
     [self createMergedImage];
@@ -71,11 +76,16 @@
 #pragma mark -
 #pragma mark Private Methods
 - (void) createMergedImage {
-    UIGraphicsBeginImageContext(self.pickedImg.size);
+    UIGraphicsBeginImageContext(self.img.frame.size);
     
-    [self.pickedImg drawInRect:CGRectMake(0, 0, self.pickedImg.size.width, self.pickedImg.size.height)];
+    [self.pickedImg drawInRect:CGRectMake(0, 0, self.img.frame.size.width, self.img.frame.size.height)];
     
-    [self.icon.image drawInRect:CGRectMake(216, 328, self.icon.image.size.width, self.icon.image.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
+    
+    if (kFaceSwapVersion == kFaceSwapProVersion) {
+        [self.icon.image drawInRect:CGRectMake(214, 324, self.icon.frame.size.width, self.icon.frame.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
+    } else {
+        [self.icon.image drawInRect:CGRectMake(214, 324 - 50, self.icon.frame.size.width, self.icon.frame.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
+    }
     
     self.mergedImg = UIGraphicsGetImageFromCurrentImageContext();
     
@@ -83,6 +93,12 @@
     
     self.icon.hidden = YES;
     [self.img setImage:self.mergedImg];
+}
+
+- (void) showMessageDialog {
+    UIAlertView * buyAlert = [[UIAlertView alloc] initWithTitle:@"Get Face Swap Pro" message:@"Face Swap Pro is a premium ad free version that alows you to save your Face Swap images with no watermark" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Get it Now!", nil];
+    [buyAlert show];
+    [buyAlert release];
 }
 
 #pragma mark -
@@ -167,7 +183,8 @@
             break;
         case 1://facebook
         {
-            FacebookViewController * fbViewController = [[[FacebookViewController alloc] init] autorelease];
+            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+            FacebookViewController * fbViewController = [[FacebookViewController alloc] init];
             if (kFaceSwapVersion == kFaceSwapProVersion) {
                 [fbViewController setImage:self.pickedImg withMessage:@"msg"];
             } else {
@@ -180,7 +197,7 @@
             [self tweet];
             break;
         case 3://remove watermark
-            self.icon.hidden = YES;
+            [self showMessageDialog];
             break;
         case 4:
             
@@ -202,7 +219,7 @@
     if ([TWTweetComposeViewController canSendTweet])
     {
         TWTweetComposeViewController *tweetSheet = [[TWTweetComposeViewController alloc] init];
-        [tweetSheet setInitialText:@"Tweeting image shared from Faceswap"];
+        [tweetSheet setInitialText:@"Check out this photo I created using the @FaceSwapApp"];
         if (kFaceSwapVersion == kFaceSwapProVersion) {
             [tweetSheet addImage:self.pickedImg];
         } else {
@@ -215,9 +232,9 @@
     {
         UIAlertView *alertView = [[UIAlertView alloc] 
                                   initWithTitle:@"Sorry"                                                             
-                                  message:@"You can't send a tweet right now, make sure your device has an internet connection and you have at least one Twitter account setup"                                                          
+                                  message:@"You can't send a tweet right now, make sure your device has version 5.0 and later with an internet connection and you have at least one Twitter account setup."                                                          
                                   delegate:nil                                              
-                                  cancelButtonTitle:@"OK"                                                   
+                                  cancelButtonTitle:@"Cancel"                                                   
                                   otherButtonTitles:nil];
         [alertView show];
     }
@@ -228,9 +245,9 @@
 
 - (void) sendMailByDefaultApp {
     NSLog(@"send mail");
-    NSString *mailTo = @"trinhduchung266@gmail.com";
+    NSString *mailTo = @"";
     NSString *cc = @"";
-    NSString *subject = @"I want to request new city";
+    NSString *subject = @"Check out this photo I created using the @FaceSwapApp";
     NSString *body = @"";
     NSString *email = [NSString stringWithFormat:@"mailto:%@?cc=%@&subject=%@&body=%@",
 					   mailTo,cc,subject,body];
@@ -240,9 +257,9 @@
 
 - (void) sendMailByMFMailComposer {
     NSLog(@"send mail");
-    NSString *mailTo = @"trinhduchung266@gmail.com";
+    NSString *mailTo = @"";
     NSString *cc = @"";
-    NSString *subject = @"Share Image";
+    NSString *subject = @"Check out this photo I created using the @FaceSwapApp";
     NSString *body = @"";
     
     MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];

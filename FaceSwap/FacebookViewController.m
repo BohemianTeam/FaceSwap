@@ -21,7 +21,6 @@
 @synthesize facebook = _facebook;
 
 - (void) dealloc {
-    [_facebook release];
     [_permissions release];
     
     [_photoTag release];
@@ -39,7 +38,9 @@
         // Custom initialization
          _permissions = [[NSArray alloc] initWithObjects:@"offline_access", nil];
         AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        _facebook = [[delegate facebook] retain];
+        
+        delegate.facebook.sessionDelegate = self;
+        _facebook = [delegate facebook];
         _facebook.sessionDelegate = self;
 
     }
