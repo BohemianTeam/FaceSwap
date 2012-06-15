@@ -56,9 +56,10 @@ static NSString* kAppId = @"166549606700386";
     
     // Initialize Facebook
     // Initialize Facebook
-    facebookViewController = [[FacebookViewController alloc] init];
+    
     
     self.facebook = [[Facebook alloc] initWithAppId:kAppId andDelegate:nil];
+    facebookViewController = [[FacebookViewController alloc] init];
     
     // Check and retrieve authorization information
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

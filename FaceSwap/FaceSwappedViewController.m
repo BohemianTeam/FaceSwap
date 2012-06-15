@@ -29,6 +29,7 @@
 }
 
 - (void) dealloc {
+    //[fbViewController release];
     [super dealloc];
 }
 
@@ -82,7 +83,7 @@
     
     
     if (kFaceSwapVersion == kFaceSwapProVersion) {
-        [self.icon.image drawInRect:CGRectMake(214, 324, self.icon.frame.size.width, self.icon.frame.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
+        //[self.icon.image drawInRect:CGRectMake(214, 324, self.icon.frame.size.width, self.icon.frame.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
     } else {
         [self.icon.image drawInRect:CGRectMake(214, 324 - 50, self.icon.frame.size.width, self.icon.frame.size.height) blendMode:kCGBlendModeNormal alpha:0.8];
     }
@@ -184,20 +185,26 @@
         case 1://facebook
         {
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            FacebookViewController * fbViewController = [[FacebookViewController alloc] init];
+            //fbViewController = [[FacebookViewController alloc] init];
             if (kFaceSwapVersion == kFaceSwapProVersion) {
-                [fbViewController setImage:self.pickedImg withMessage:@"msg"];
+                [delegate.facebookViewController setImage:self.pickedImg withMessage:@"msg"];
             } else {
-                [fbViewController setImage:self.mergedImg withMessage:@"msg"];
+                [delegate.facebookViewController setImage:self.mergedImg withMessage:@"msg"];
             }
-            [self.navigationController pushViewController:fbViewController animated:YES];
+
+            //fbViewController.delegate = self;
+            delegate.facebookViewController.delegate = self;
+            [self.navigationController pushViewController:delegate.facebookViewController animated:YES];
+            
             break;
         }
         case 2://twitter
             [self tweet];
             break;
         case 3://remove watermark
-            [self showMessageDialog];
+            if (kFaceSwapVersion != kFaceSwapProVersion) {
+                [self showMessageDialog];
+            }
             break;
         case 4:
             
@@ -211,6 +218,7 @@
 #pragma mark Facebook sharing -- FacebookViewcontroller delegate
 - (void) didUploadToFacebookSuccess {
     NSLog(@"upload image to facebook success");
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark -

@@ -12,7 +12,7 @@
 #import "FacebookViewController.h"
 
 @interface FaceSwappedViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, FacebookViewControllerDelegate, ADBannerViewDelegate>{
-    
+    FacebookViewController * fbViewController;
 }
 
 @property (nonatomic, retain) IBOutlet ADBannerView *bannerView;

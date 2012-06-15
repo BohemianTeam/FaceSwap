@@ -39,7 +39,7 @@
          _permissions = [[NSArray alloc] initWithObjects:@"offline_access", nil];
         AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         
-        delegate.facebook.sessionDelegate = self;
+        //delegate.facebook.sessionDelegate = self;
         _facebook = [delegate facebook];
         _facebook.sessionDelegate = self;
 
@@ -121,7 +121,8 @@
 
 #pragma mark - UIAlertViewDelegate methods
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    //[self.navigationController popToRootViewControllerAnimated:YES];
     [_delegate didUploadToFacebookSuccess];
 }
  
@@ -183,6 +184,7 @@
     } else {
         [self showLoggedIn];
     }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -365,7 +367,7 @@
 - (void)fbDidLogin {
     NSLog(@"fbDIdLogin");
     [self showLoggedIn];
-    
+
     [self storeAuthData:[_facebook accessToken] expiresAt:[_facebook expirationDate]];
 
 }
@@ -380,6 +382,8 @@
  */
 - (void)fbDidNotLogin:(BOOL)cancelled {
     NSLog(@"%@",@"facebook did not login");
+
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /**
