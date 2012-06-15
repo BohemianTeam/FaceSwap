@@ -185,16 +185,16 @@
         case 1://facebook
         {
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            //fbViewController = [[FacebookViewController alloc] init];
+            fbViewController = [[FacebookViewController alloc] init];
             if (kFaceSwapVersion == kFaceSwapProVersion) {
-                [delegate.facebookViewController setImage:self.pickedImg withMessage:@"msg"];
+                [fbViewController setImage:self.pickedImg withMessage:@"msg"];
             } else {
-                [delegate.facebookViewController setImage:self.mergedImg withMessage:@"msg"];
+                [fbViewController setImage:self.mergedImg withMessage:@"msg"];
             }
 
-            //fbViewController.delegate = self;
-            delegate.facebookViewController.delegate = self;
-            [self.navigationController pushViewController:delegate.facebookViewController animated:YES];
+            fbViewController.delegate = self;
+            //delegate.facebookViewController.delegate = self;
+            [self.navigationController pushViewController:fbViewController animated:YES];
             
             break;
         }
